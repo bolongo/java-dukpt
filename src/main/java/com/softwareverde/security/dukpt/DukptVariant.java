@@ -69,6 +69,19 @@ public class DukptVariant {
     }
 
     /**
+     * <p>Computes a DUKPT (Derived Unique Key-Per-Transaction).
+     *
+     * @see Dukpt#computeKeyFromIpek(byte[], byte[])
+     * @param initialPinEncryptionKey
+     * @param keySerialNumber
+     * @return
+     * @throws Exception
+     */
+    public byte[] computeKeyFromIpek(byte[] initialPinEncryptionKey, byte[] keySerialNumber) throws Exception {
+        return Dukpt.computeKeyFromIpek(initialPinEncryptionKey, keySerialNumber, _keyRegisterBitmask, _dataVariantBitmask);
+    }
+
+    /**
      * <p>Computes the Initial PIN Encryption Key (Sometimes referred to as
      * the Initial PIN Entry Device Key).
      *

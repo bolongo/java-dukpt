@@ -100,6 +100,51 @@ public final class Dukpt {
 	}
 
 	/**
+	 * <p>Computes a DUKPT (Derived Unique Key-Per-Transaction).
+	 *
+	 * <p>This is derived from the Initial Pin Encryption Key, which in itself is derived from the Base Derivation Key,
+	 * IPEK should be injected into the device and should remain secret, and the Key Serial Number which is a
+	 * concatenation of the device's serial number and its encryption (or transaction) counter.
+	 *
+	 * @see #getIpek
+	 * @param initialPinEncryptionKey The Base Derivation Key
+	 * @param keySerialNumber The Key Serial Number
+	 * @return A unique key for this set of data.
+	 * @throws Exception
+	 */
+	public static byte[] computeKeyFromIpek(byte[] initialPinEncryptionKey, byte[] keySerialNumber) throws Exception {
+		return computeKeyFromIpek(initialPinEncryptionKey, keySerialNumber, DEFAULT_KEY_REGISTER_BITMASK, DEFAULT_VARIANT_BITMASK);
+	}
+
+	/**
+	 * <p>Computes a DUKPT (Derived Unique Key-Per-Transaction) using the provided key register bitmask and data variant
+	 * bitmask.</p>
+	 *
+	 * @see #computeKeyFromIpek(byte[], byte[])
+	 * @param initialPinEncryptionKey
+	 * @param keySerialNumber
+	 * @param keyRegisterBitmask
+	 * @param dataVariantBitmask
+	 * @return
+	 * @throws Exception
+	 */
+	protected static byte[] computeKeyFromIpek(byte[] initialPinEncryptionKey, byte[] keySerialNumber, BitSet keyRegisterBitmask, BitSet dataVariantBitmask) throws Exception {
+		BitSet ksn = toBitSet(keySerialNumber);
+		BitSet ipek = toBitSet(initialPinEncryptionKey);
+
+		// convert key for returning
+		BitSet key = _getCurrentKey(ipek, ksn, keyRegisterBitmask, dataVariantBitmask);
+		byte[] rkey = toByteArray(key);
+
+		// secure memory
+		obliviate(ksn);
+		obliviate(ipek);
+		obliviate(key);
+
+		return rkey;
+	}
+
+	/**
 	 * <p>Computes the Initial PIN Encryption Key (Sometimes referred to as
 	 * the Initial PIN Entry Device Key).
 	 *
