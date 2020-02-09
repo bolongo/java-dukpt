@@ -670,6 +670,126 @@ public final class Dukpt {
 	}
 
 	/**
+	 * <p>Performs Single AES Encryption with a 192 bit key (24 bytes).
+	 *
+	 * <p>This is supplied for use generic encryption and decryption purposes, but is not a part of the Dukpt algorithm.
+	 *
+	 * @param key The key for encryption.
+	 * @param data The data to encrypt.
+	 * @param padding When true, PKCS5 Padding will be used.  This is most likely not desirable.
+	 * @return The encrypted.
+	 * @throws Exception
+	 */
+	public static byte[] encryptAes192(byte[] key, byte[] data, boolean padding) throws Exception {
+		byte[] _key = padByteArrayWithArray(key, key, 24);
+		return encryptAes(_key, data, padding);
+	}
+
+	/**
+	 * <p>Performs Single AES Decryption with a 192 bit key (24 bytes).
+	 *
+	 * <p>This is supplied for use generic encryption and decryption purposes, but is not a part of the Dukpt algorithm.
+	 *
+	 * @param key The key for decryption.
+	 * @param data The data to decrypt.
+	 * @param padding When true, PKCS5 Padding will be assumed.  This is most likely not desirable.
+	 * @return The decrypted data.
+	 * @throws Exception
+	 */
+	public static byte[] decryptAes192(byte[] key, byte[] data, boolean padding) throws Exception {
+		byte[] _key = padByteArrayWithArray(key, key, 24);
+		return decryptAes(_key, data, padding);
+	}
+
+	/**
+	 * <p>Performs Single AES Encryption with a 192 bit key (24 bytes) without padding.
+	 *
+	 * <p>This is supplied for use generic encryption and decryption purposes, but is not a part of the Dukpt algorithm.
+	 *
+	 * @param key The key for encryption.
+	 * @param data The data to encrypt.
+	 * @return The encrypted data.
+	 * @throws Exception
+	 */
+	public static byte[] encryptAes192(byte[] key, byte[] data) throws Exception {
+		return encryptAes192(key, data, false);
+	}
+
+	/**
+	 * <p>Performs Triple AES Decryption with a 192 bit key (24 bytes) without padding.
+	 *
+	 * <p>This is supplied for use generic encryption and decryption purposes, but is not a part of the Dukpt algorithm.
+	 *
+	 * @param key The key for decryption.
+	 * @param data The data to decrypt.
+	 * @return The decrypted data.
+	 * @throws Exception
+	 */
+	public static byte[] decryptAes192(byte[] key, byte[] data) throws Exception {
+		return decryptAes192(key, data, false);
+	}
+
+	/**
+	 * <p>Performs Single AES Encryption with a 256 bit key (32 bytes).
+	 *
+	 * <p>This is supplied for use generic encryption and decryption purposes, but is not a part of the Dukpt algorithm.
+	 *
+	 * @param key The key for encryption.
+	 * @param data The data to encrypt.
+	 * @param padding When true, PKCS5 Padding will be used.  This is most likely not desirable.
+	 * @return The encrypted.
+	 * @throws Exception
+	 */
+	public static byte[] encryptAes256(byte[] key, byte[] data, boolean padding) throws Exception {
+		byte[] _key = padByteArrayWithArray(key, key, 32);
+		return encryptAes(_key, data, padding);
+	}
+
+	/**
+	 * <p>Performs Single AES Decryption with a 256 bit key (32 bytes).
+	 *
+	 * <p>This is supplied for use generic encryption and decryption purposes, but is not a part of the Dukpt algorithm.
+	 *
+	 * @param key The key for decryption.
+	 * @param data The data to decrypt.
+	 * @param padding When true, PKCS5 Padding will be assumed.  This is most likely not desirable.
+	 * @return The decrypted data.
+	 * @throws Exception
+	 */
+	public static byte[] decryptAes256(byte[] key, byte[] data, boolean padding) throws Exception {
+		byte[] _key = padByteArrayWithArray(key, key, 32);
+		return decryptAes(_key, data, padding);
+	}
+
+	/**
+	 * <p>Performs Single AES Encryption with a 256 bit key (32 bytes) without padding.
+	 *
+	 * <p>This is supplied for use generic encryption and decryption purposes, but is not a part of the Dukpt algorithm.
+	 *
+	 * @param key The key for encryption.
+	 * @param data The data to encrypt.
+	 * @return The encrypted data.
+	 * @throws Exception
+	 */
+	public static byte[] encryptAes256(byte[] key, byte[] data) throws Exception {
+		return encryptAes256(key, data, false);
+	}
+
+	/**
+	 * <p>Performs Triple AES Decryption with a 256 bit key (32 bytes) without padding.
+	 *
+	 * <p>This is supplied for use generic encryption and decryption purposes, but is not a part of the Dukpt algorithm.
+	 *
+	 * @param key The key for decryption.
+	 * @param data The data to decrypt.
+	 * @return The decrypted data.
+	 * @throws Exception
+	 */
+	public static byte[] decryptAes256(byte[] key, byte[] data) throws Exception {
+		return decryptAes256(key, data, false);
+	}
+
+	/**
 	 * <p>Converts a byte into an extended BitSet.
 	 */
 	public static BitSet toBitSet(byte b) {
@@ -805,6 +925,21 @@ public final class Dukpt {
 		for (int i=0; i<n; i++) {
 			r.nextBytes(b);
 		}
+	}
+
+	private static byte[] padByteArrayWithArray(byte[] input, byte[] padding, int desiredLength) {
+		if(input.length >= desiredLength) {
+			return input;
+		}
+		byte[] result = new byte[desiredLength];
+		int i = input.length;
+		System.arraycopy(input, 0, result, 0, i);
+		while(i < result.length) {
+			System.arraycopy(padding, 0, result, i, Math.min(padding.length, result.length - i));
+			i += input.length;
+		}
+
+		return result;
 	}
 
 }
